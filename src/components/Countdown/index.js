@@ -2,6 +2,7 @@ import React from "react";
 import Controls from "./Controls";
 import Timer from "./Timer";
 import moment from "moment";
+import Datepicker from "./Datepicker";
 
 class Countdown extends React.Component {
   constructor(props) {
@@ -56,6 +57,7 @@ class Countdown extends React.Component {
           <div className="container">
             <h1 className="title">Year is comming up</h1>
             <Timer interval={interval} />
+            <Datepicker />
             <Controls pause={pause} onPausedToggle={this.handleTogglePaused} />
           </div>
         </div>

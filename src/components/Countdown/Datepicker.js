@@ -26,8 +26,6 @@ class Datepicker extends React.Component {
     valid && dirty && (classes += " is-success");
     !valid && dirty && (classes += " is-danger");
 
-    console.log(classes);
-
     return (
       <div
         className="field is-grouped is-grouped-centered"

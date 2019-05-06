@@ -1,12 +1,24 @@
 import React from "react";
 import moment from "moment";
+import Controls from "./Controls";
 
 class Countdown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      interval: this.getRemainingTime()
+      interval: this.getRemainingTime(),
+      pause: false
     };
+  }
+
+  componentDidMount() {
+    this.interval = setInterval(() => {
+      this.setState({ interval: this.getRemainingTime() });
+    }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   getRemainingTime() {
@@ -16,10 +28,24 @@ class Countdown extends React.Component {
     return moment.duration(diff);
   }
 
+  togglePaused = () => {
+    this.setState((prevState, props) => {
+      const pause = !prevState.pause;
+      if (pause) {
+        clearInterval(this.interval);
+      } else {
+        this.interval = setInterval(() => {
+          this.setState({ interval: this.getRemainingTime() });
+        }, 1000);
+      }
+      return { pause };
+    });
+  };
+
   render() {
-    const { interval } = this.state;
+    const { interval, pause } = this.state;
     return (
-      <section className="hero is-info is-bold is-fullheight has-text-centered">
+      <section className="hero is-dark is-bold is-fullheight has-text-centered">
         <div className="hero-body">
           <div className="container">
             <h1 className="title">Year is comming up</h1>
@@ -51,6 +77,7 @@ class Countdown extends React.Component {
                 </div>
               </nav>
             </div>
+            <Controls pause={pause} onPausedToggle={this.togglePaused} />
           </div>
         </div>
       </section>

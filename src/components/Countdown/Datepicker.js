@@ -1,18 +1,25 @@
 import React from "react";
 import moment from "moment";
+import { validate } from "@babel/types";
 
 class Datepicker extends React.Component {
   state = {
-    date: ""
+    date: "",
+    valid: true
   };
 
-  handleDateChange = e => {
-    this.setState({ date: e.target.value });
+  handleDateChange = ({ target: { value } }) => {
+    const date = moment(value);
+    this.setState({
+      date: value,
+      valid: date.isValid() && date.isAfter(moment())
+    });
   };
 
   handleDateSubmit = e => {
     e.preventDefault();
-    this.props.onDateReset(moment(this.state.date));
+    const { valid, date } = this.state;
+    valid && this.props.onDateReset(moment(date));
   };
 
   render() {

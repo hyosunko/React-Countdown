@@ -56,14 +56,16 @@ class Countdown extends React.Component {
   };
 
   render() {
-    const { pause } = this.state,
+    const { pause, nextDate } = this.state,
       interval = this.getRemainingTime();
 
     return (
       <section className="hero is-info is-bold is-fullheight has-text-centered">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title">The Day is Coming..</h1>
+            <h1 className="title">
+              {nextDate.format("MMM Do YYYY")} is Coming Up!
+            </h1>
             <Timer interval={interval} />
             <Datepicker onDateReset={this.handleDateReset} />
             <Controls pause={pause} onPausedToggle={this.handleTogglePaused} />

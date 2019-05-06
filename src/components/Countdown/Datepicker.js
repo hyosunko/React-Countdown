@@ -1,54 +1,53 @@
 import React from "react";
 import moment from "moment";
-import { validate } from "@babel/types";
 
 class Datepicker extends React.Component {
   state = {
     date: "",
-    valid: true
+    valid: true,
+    dirty: false
   };
 
   handleDateChange = ({ target: { value } }) => {
-    const date = moment(value);
+    const date = moment(value),
+      valid = date.isValid() && date.isAfter(moment());
     this.setState({
+      valid,
       date: value,
-      valid: date.isValid() && date.isAfter(moment())
+      dirty: true
     });
-  };
-
-  handleDateSubmit = e => {
-    e.preventDefault();
-    const { valid, date } = this.state;
     valid && this.props.onDateReset(moment(date));
   };
 
   render() {
-    const { date } = this.state;
+    let { date, valid, dirty } = this.state,
+      classes = "input is-medium is-outlined is-rounded";
+
+    valid && dirty && (classes += " is-success");
+    !valid && dirty && (classes += " is-danger");
+
+    console.log(classes);
+
     return (
-      <form onSubmit={this.handleDateSubmit}>
-        <div
-          className="field is-grouped is-grouped-centered"
-          style={{ marginBottom: "50px" }}
-        >
-          <div className="control">
-            <input
-              className="input is-medium is-outlined is-rounded"
-              type="text"
-              value={date}
-              onChange={this.handleDateChange}
-              placeholder="Type a date 2019-10-25"
-            />
-          </div>
-          <div className="control">
-            <button
-              type="submit"
-              className="button is-primary is-medium is-rounded is-outlined"
-            >
-              Reset
-            </button>
-          </div>
+      <div
+        className="field is-grouped is-grouped-centered"
+        style={{ marginBottom: "50px" }}
+      >
+        <div className="control has-text-centered">
+          <input
+            className={classes}
+            type="text"
+            value={date}
+            onChange={this.handleDateChange}
+            placeholder="Type a date 2019-10-25"
+          />
+          {!valid && dirty && (
+            <i className="help is-danger">
+              Please endter valid (and futre!) date
+            </i>
+          )}
         </div>
-      </form>
+      </div>
     );
   }
 }

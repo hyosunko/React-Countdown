@@ -8,7 +8,8 @@ class Countdown extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      interval: this.getRemainingTime(),
+      currentDate: moment(),
+      nextDate: moment({ year: moment().year() + 1 }),
       pause: false
     };
   }
@@ -22,9 +23,9 @@ class Countdown extends React.Component {
   }
 
   getRemainingTime() {
-    let now = moment(),
-      newYear = moment({ year: now.year() + 1 }),
-      diff = newYear.diff(now);
+    let { currentDate, nextDate } = this.state,
+      diff = nextDate.diff(currentDate);
+
     return moment.duration(diff);
   }
 
@@ -46,18 +47,25 @@ class Countdown extends React.Component {
 
   resume() {
     this.interval = setInterval(() => {
-      this.setState({ interval: this.getRemainingTime() });
+      this.setState({ currentDate: moment() });
     }, 1000);
   }
+
+  handleDateReset = nextDate => {
+    this.setState({ nextDate });
+  };
+
   render() {
-    const { interval, pause } = this.state;
+    const { pause } = this.state,
+      interval = this.getRemainingTime();
+
     return (
       <section className="hero is-info is-bold is-fullheight has-text-centered">
         <div className="hero-body">
           <div className="container">
-            <h1 className="title">Year is comming up</h1>
+            <h1 className="title">The Day is Coming..</h1>
             <Timer interval={interval} />
-            <Datepicker />
+            <Datepicker onDateReset={this.handleDateReset} />
             <Controls pause={pause} onPausedToggle={this.handleTogglePaused} />
           </div>
         </div>

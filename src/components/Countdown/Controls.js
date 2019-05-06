@@ -2,7 +2,6 @@ import React from "react";
 
 const Controls = ({ pause, onPausedToggle }) => (
   <div className="field is-grouped is-grouped-centered">
-    {console.log(pause)}
     <p className="control">
       <button
         className="button is-danger is-outlined is-rounded is-medium"

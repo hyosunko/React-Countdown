@@ -2,7 +2,7 @@ import React from "react";
 import "moment-holiday";
 
 export default ({ active, onToggle, holidays }) => (
-  <div className={"modal" + (active ? " is-active" : "")}>
+  <div className={`modal ${active ? "is-active" : ""}`}>
     <div className="modal-background" onClick={onToggle} />
     <div className="modal-card">
       <header className="modal-card-head">

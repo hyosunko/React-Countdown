@@ -7,7 +7,7 @@ import Timer from "./Timer";
 import Datepicker from "./Datepicker";
 import HolidayModal from "./HolidayModal";
 
-class Countdown extends React.Component {
+export default class extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,14 +34,20 @@ class Countdown extends React.Component {
   }
 
   handleTogglePaused = () => {
-    this.setState((prevState, props) => {
-      const pause = !prevState.pause;
+    this.setState(({ pause }, props) => {
+      pause = !pause;
       if (pause) {
         this.pause();
       } else {
         this.resume();
       }
-      return { pause };
+
+      const nextState = {
+        pause
+      };
+
+      !pause && (nextState.currentDate = moment());
+      return nextState;
     });
   };
 
@@ -69,7 +75,7 @@ class Countdown extends React.Component {
   }
 
   render() {
-    const { pause, nextDate, showHolidays } = this.state,
+    const { pause, nextDate, showHolidays, currentDate } = this.state,
       interval = this.getRemainingTime(),
       holidays = this.getHolidays();
 
@@ -80,7 +86,7 @@ class Countdown extends React.Component {
             <h1 className="title">
               {nextDate.format("MMM Do YYYY")} is Coming Up!
               <button
-                className="button is-small is-rounded is-light"
+                className="button is-small is-rounded is-light is-outlined"
                 style={{ margin: "5px 0 0 10px" }}
                 onClick={this.handleHolidayToggle}
               >
@@ -90,6 +96,10 @@ class Countdown extends React.Component {
             <Timer interval={interval} />
             <Datepicker onDateReset={this.handleDateReset} />
             <Controls pause={pause} onPausedToggle={this.handleTogglePaused} />
+
+            <section className="section">
+              <i>{currentDate.format("dddd, MMM Do YYYY (UTCZ)")}</i>
+            </section>
             <HolidayModal
               holidays={holidays}
               active={showHolidays}
@@ -101,5 +111,3 @@ class Countdown extends React.Component {
     );
   }
 }
-
-export default Countdown;

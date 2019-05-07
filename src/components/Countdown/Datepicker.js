@@ -1,7 +1,7 @@
 import React from "react";
 import moment from "moment";
 
-class Datepicker extends React.Component {
+export default class extends React.Component {
   state = {
     date: "",
     valid: true,
@@ -49,5 +49,3 @@ class Datepicker extends React.Component {
     );
   }
 }
-
-export default Datepicker;
